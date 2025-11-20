@@ -1,0 +1,81 @@
+<div class="d-flex justify-content-end mb-3">
+  <a href="#" class="btn bg-primary btn-sm background text-white" data-bs-toggle="modal" data-bs-target="#myModal"
+    (click)="isEdit=false; selectedGalleryForm.reset()">
+    <i class="fa fa-plus"></i> Add Gallery Event
+  </a>
+</div>
+<table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th class="background">#</th>
+      <th class="background">Title</th>
+      <th class="background">Event Date</th>
+      <th class="background">Photos</th>
+      <th class="text-end background">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of galleryData let i=index">
+      <td>{{i+1}}</td>
+      <td>{{item.title}}</td>
+      <td>{{item.date | date}}</td>
+      <td>
+        <ng-container *ngFor="let img of item.images">
+          <img [src]="sanitizerUrl(img)" alt="Event 1" class="img-thumbnail" width="50px" height="50px" />
+        </ng-container>
+      </td>
+      <td class="text-end">
+        <i class="fa fa-pencil me-4" data-bs-toggle="modal" data-bs-target="#myModal" (click)="edit(item)"></i>
+        <i class="fa fa-trash text-danger" (click)="deleteGallery(item._id)"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title text text-center">Add/Edit Gallery Event</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form [formGroup]="selectedGalleryForm">
+          <div class="row">
+            <!-- Part 1: Event Details -->
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label for="eventTitle" class="form-label">Event Title</label>
+                <input type="text" class="form-control" id="eventTitle" placeholder="Enter event title"
+                  formControlName="title" />
+              </div>
+              <div class="mb-3">
+                <label for="eventDate" class="form-label">Event Date</label>
+                <input type="date" class="form-control" id="eventDate" formControlName="date" />
+              </div>
+              <div class="mb-3">
+                <label for="location" class="form-label">Image URLs (comma-separated)</label>
+                <input type="text" class="form-control" id="images" placeholder="Enter image URLs"
+                  formControlName="imagesUrl" />
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger background btn-sm" data-bs-dismiss="modal"
+            (click)="submitGallery()" [disabled]='selectedGalleryForm.invalid'>
+            Submit
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
